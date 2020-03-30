@@ -1,8 +1,12 @@
 package com.gzeinnumer.chatapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +24,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.gzeinnumer.chatapp.databinding.ActivityMainBinding;
+import com.gzeinnumer.chatapp.fragment.CameraFragment;
+import com.gzeinnumer.chatapp.fragment.ChatsFragment;
+import com.gzeinnumer.chatapp.fragment.UsersFragment;
 import com.gzeinnumer.chatapp.model.User;
 
+import java.util.ArrayList;
 import java.util.Objects;
+
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //todo 37
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
+        viewPagerAdapter.addFragment(new CameraFragment(), "Camera");
+        viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
+        viewPagerAdapter.addFragment(new UsersFragment(), "Users");
+
+        binding.viewPager.setAdapter(viewPagerAdapter);
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
     }
 
     //todo 33
@@ -85,4 +105,48 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    //todo 36
+    class ViewPagerAdapter extends FragmentPagerAdapter{
+
+        private ArrayList<Fragment> fragments;
+        private ArrayList<String> title;
+
+        public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
+            this.fragments = new ArrayList<>();
+            this.title = new ArrayList<>();
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        public void addFragment(Fragment fragment, String title){
+            this.fragments.add(fragment);
+            this.title.add(title);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return title.get(position);
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
