@@ -1,6 +1,7 @@
 package com.gzeinnumer.chatapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.gzeinnumer.chatapp.MessageActivity;
 import com.gzeinnumer.chatapp.R;
 import com.gzeinnumer.chatapp.databinding.UserItemBinding;
 import com.gzeinnumer.chatapp.model.User;
@@ -51,13 +53,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder> {
             this.binding = itemView;
         }
 
-        void bind(User user) {
+        void bind(final User user) {
             binding.username.setText(user.getUsername());
             if(user.getImageURL().equals("default")){
                 binding.profileImage.setImageResource(R.mipmap.ic_launcher);
             } else {
                 Glide.with(context).load(user.getImageURL()).into(binding.profileImage);
             }
+            //todo 47
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, MessageActivity.class);
+                    intent.putExtra("id", user.getId());
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }
