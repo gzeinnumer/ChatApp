@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.gzeinnumer.chatapp.databinding.ActivityMessageBinding;
 import com.gzeinnumer.chatapp.model.User;
+
+import java.util.HashMap;
 
 //todo 44
 public class MessageActivity extends AppCompatActivity {
@@ -49,7 +52,7 @@ public class MessageActivity extends AppCompatActivity {
         });
 
         intent = getIntent();
-        String userId = intent.getStringExtra("id");
+        final String userId = intent.getStringExtra("id");
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users_chat_app").child(userId);
 
@@ -71,5 +74,32 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        //todo 51
+        binding.btnSent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = binding.textSend.getText().toString();
+
+                if(!msg.equals("")){
+                    sendMessage(firebaseUser.getUid(), userId, msg);
+                } else {
+                    Toast.makeText(MessageActivity.this, "pesan jangan kosong", Toast.LENGTH_SHORT).show();
+                }
+                binding.textSend.setText("");
+            }
+        });
+
+
+    }
+
+    //todo 50
+    private void sendMessage(String sender, String receiver, String message){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("sender", sender);
+        hashMap.put("receiver", receiver);
+        hashMap.put("message", message);
+        reference.child("Chats_app").push().setValue(hashMap);
     }
 }
