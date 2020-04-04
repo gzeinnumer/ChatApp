@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.gzeinnumer.chatapp.databinding.ActivityMainBinding;
 import com.gzeinnumer.chatapp.fragment.CameraFragment;
 import com.gzeinnumer.chatapp.fragment.ChatsFragment;
+import com.gzeinnumer.chatapp.fragment.ProfileFragment;
 import com.gzeinnumer.chatapp.fragment.UsersFragment;
 import com.gzeinnumer.chatapp.model.User;
 
@@ -83,7 +84,9 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(new CameraFragment(), "Camera");
         viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
         viewPagerAdapter.addFragment(new UsersFragment(), "Users");
-
+        //todo 70
+        viewPagerAdapter.addFragment(new ProfileFragment(), "Profile");
+        //end todo 70
         binding.viewPager.setAdapter(viewPagerAdapter);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
     }
