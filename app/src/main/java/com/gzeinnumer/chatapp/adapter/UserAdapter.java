@@ -23,10 +23,18 @@ import javax.microedition.khronos.opengles.GL;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder> {
     private Context context;
     private List<User> list;
+    //todo 84 tambah variable untuk status dan perbaiki contructor
+    private boolean isChat;
 
-    public UserAdapter(List<User> list) {
+//    public UserAdapter(List<User> list) {
+//        this.list = list;
+//    }
+    //todo 85 komentarkan costruktor diatas
+    public UserAdapter(List<User> list, boolean isChat) {
         this.list = list;
+        this.isChat = isChat;
     }
+    //end todo 85
 
     @NonNull
     @Override
@@ -38,7 +46,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-        holder.bind(list.get(position));
+//        holder.bind(list.get(position));
+        //todo 86 komentarkan yang diatas
+        holder.bind(list.get(position), isChat);
     }
 
     @Override
@@ -53,7 +63,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder> {
             this.binding = itemView;
         }
 
-        void bind(final User user) {
+//        void bind(final User user) {
+        //todo 87 komentarkan yang diatas
+        void bind(final User user, boolean isChat) {
             binding.username.setText(user.getUsername());
             if(user.getImageURL().equals("default")){
                 binding.profileImage.setImageResource(R.mipmap.ic_launcher);
@@ -69,6 +81,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder> {
                     context.startActivity(intent);
                 }
             });
+
+            //todo 88
+            if (isChat){
+                if(user.getStatus().equals("online")){
+                    binding.imgOn.setVisibility(View.VISIBLE);
+                    binding.imgOff.setVisibility(View.GONE);
+                } else {
+                    binding.imgOn.setVisibility(View.GONE);
+                    binding.imgOff.setVisibility(View.VISIBLE);
+                }
+            } else {
+                binding.imgOn.setVisibility(View.GONE);
+                binding.imgOff.setVisibility(View.GONE);
+            }
+            //end todo 88
         }
     }
 }

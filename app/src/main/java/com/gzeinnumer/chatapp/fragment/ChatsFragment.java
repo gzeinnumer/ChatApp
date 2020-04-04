@@ -111,7 +111,12 @@ public class ChatsFragment extends Fragment {
 
                 binding.rvData.setHasFixedSize(true);
                 binding.rvData.setLayoutManager(new LinearLayoutManager(context));
-                myUserAdapter = new UserAdapter(userListFromUsers);
+//                myUserAdapter = new UserAdapter(userListFromUsers);
+                //todo 89 komentarkan yang diatas
+                myUserAdapter = new UserAdapter(userListFromUsers, true);
+                //end todo 89
+                //todo 90 perbaiki semua field di firebase
+
                 binding.rvData.setAdapter(myUserAdapter);
             }
 

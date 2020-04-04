@@ -68,7 +68,10 @@ public class UsersFragment extends Fragment {
                 }
                 Log.d("MyZein", String.valueOf(list.size()));
 
-                myAdapter = new UserAdapter(list);
+//                myAdapter =     new UserAdapter(list);
+                //todo 94 komentari yang diatas
+                myAdapter =     new UserAdapter(list, true);
+                //end todo 94
                 binding.rvData.setAdapter(myAdapter);
                 binding.rvData.setLayoutManager(new LinearLayoutManager(getContext()));
             }

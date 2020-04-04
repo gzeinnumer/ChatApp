@@ -31,6 +31,7 @@ import com.gzeinnumer.chatapp.fragment.UsersFragment;
 import com.gzeinnumer.chatapp.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
@@ -103,7 +104,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(MainActivity.this, StartActivity.class));
+//            startActivity(new Intent(MainActivity.this, StartActivity.class));
+            //todo 91 komentarkan yang diatas
+            startActivity(new Intent(MainActivity.this, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            //end todo 91
             finish();
         }
         return false;
@@ -142,6 +146,31 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return title.get(position);
         }
+    }
+
+
+    //todo 80
+    private void status(String status){
+        reference = FirebaseDatabase.getInstance().getReference("Users_chat_app").child(firebaseUser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        reference.updateChildren(hashMap);
+    }
+
+    //todo 81
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    //todo 82
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
     }
 }
 
