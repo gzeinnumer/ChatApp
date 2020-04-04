@@ -83,6 +83,10 @@ public class RegisterActivity extends AppCompatActivity {
                     //todo 93
                     hashMap.put("status", "offline");
                     //end todo 93
+                    //todo 99
+                    hashMap.put("search", username.toLowerCase());
+                    //end todo 99
+                    //todo 100 perbaiki struktur di firebase dan tambahkan search
                     reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
