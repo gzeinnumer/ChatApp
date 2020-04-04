@@ -32,10 +32,10 @@ public class ChatsFragment extends Fragment {
     //todo 61
     private FragmentChatsBinding binding;
     private UserAdapter myUserAdapter;
-    private List<User> users = new ArrayList<>();
+    private List<User> userListFromUsers = new ArrayList<>();
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
-    private List<String> userList = new ArrayList<>();
+    private List<String> userListFromChat = new ArrayList<>();
     private Context context;
 
     @Override
@@ -57,16 +57,17 @@ public class ChatsFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
+                userListFromChat.clear();
 
+                //mengambil data dari folder chat yang ada current user id sebagai pengirim atau penerima
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
 
                     if(chat.getSender().equals(firebaseUser.getUid())){
-                        userList.add(chat.getReceiver());
+                        userListFromChat.add(chat.getReceiver());
                     }
                     if(chat.getReceiver().equals(firebaseUser.getUid())){
-                        userList.add(chat.getSender());
+                        userListFromChat.add(chat.getSender());
                     }
                 }
 
@@ -86,20 +87,22 @@ public class ChatsFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                users.clear();
+                userListFromUsers.clear();
+                //mengambil semua list user di table user
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
 
-                    for (String id: userList){
+                    //mengambil semua user dan melihat apakah user pernah menerima atau mengirim pesan
+                    for (String id: userListFromChat){
                         if (user.getId().equals(id)){
-                            if(users.size() != 0){
-                                for (User user1: users){
-                                    if(!user.getId().equals(user1.getId())){
-                                        users.add(user);
+                            if(userListFromUsers.size() != 0){
+                                for (User userYangTersedia: userListFromUsers){
+                                    if(!user.getId().equals(userYangTersedia.getId())){
+                                        userListFromUsers.add(user);
                                     }
                                 }
                             } else {
-                                users.add(user);
+                                userListFromUsers.add(user);
                             }
                         }
                     }
@@ -108,7 +111,7 @@ public class ChatsFragment extends Fragment {
 
                 binding.rvData.setHasFixedSize(true);
                 binding.rvData.setLayoutManager(new LinearLayoutManager(context));
-                myUserAdapter = new UserAdapter(users);
+                myUserAdapter = new UserAdapter(userListFromUsers);
                 binding.rvData.setAdapter(myUserAdapter);
             }
 
